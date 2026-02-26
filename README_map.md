@@ -189,4 +189,57 @@ npx prisma init
 # Nest.JS
 ...
 # Prisma
-...
+
+- Goal: Prisma is a next-generation Object-Relational Mapper (ORM) specifically designed for Node.js and TypeScript. Its primary purpose is to simplify database interactions by allowing developers to work with data using objects in their code instead of writing raw SQL queries.
+
+le fichier .prisma est une description pas la db, c'est un plan d'architecte ce n'est pas la maison.
+
+- npx prisma init: Sets up a new Prisma project by creating a prisma/ directory, a schema.prisma file for your models, and a .env file for database credentials
+
+- npx prisma generate: Reads your schema.prisma and generates the Prisma Client, a type-safe query builder used in your application code.
+
+- npx prisma migrate dev: Used in development to create and apply SQL migrations to your database based on changes in your schema.
+
+- npx prisma studio: Opens a GUI (Graphical User Interface) in your browser, allowing you to view and edit the data in your database without writing SQL.
+
+- npx prisma db push: Synchronizes your Prisma schema with your database schema without using migrations, often used for prototyping or local development
+
+# Docker
+
+- Goal: Docker is a platform for "containerising" applications. Docker simplifies how you package and run your software so it works exactly the same on any machine.
+The main goal of Docker is to solve the "it works on my machine" problem. It ensures that if an app runs on a developer's laptop, it will run identically in testing and production.
+
+Docker = environnement isolé reproductible.
+
+Dans ton projet SaaS tu as besoin de :
+
+React (frontend)
+
+NestJS (backend)
+
+PostgreSQL (base de données)
+
+Le problème :
+
+👉 PostgreSQL doit être installé, configuré, versionné, démarré…
+👉 Ça dépend de ton OS
+👉 Ça casse souvent
+👉 Sur une autre machine ça ne marche plus
+
+🎯 Docker résout ça
+
+Docker permet de dire :
+
+"Je veux PostgreSQL version 16, avec ces identifiants, sur ce port, point."
+
+- docker compose up -d: is used to start and run your entire application stack in the background
+
+- docker compose ps to see which services are currently running and their health.
+
+- docker compose logs -f to follow the logs if you need to debug.
+
+- docker compose stop: it pauses the docker processus
+
+- docker compose down: Stops and removes the containers and networks created by up.
+
+Le backend peut être redémarrer plusieurs fois mais la db doit être stable sinon on perd toutes les données à chaque fois. Docker isole la db
