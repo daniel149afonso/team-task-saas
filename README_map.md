@@ -98,17 +98,9 @@ Vite lance un serveur de développement avec HMR.
 
 HMR = Hot Module Replacement
 
-Ça veut dire :
-
-Vite surveille tes fichiers src/
-
-Dès qu’un fichier change
-
-Il recompilE UNIQUEMENT ce fichier
-
-Il envoie la mise à jour au navigateur
-
-React remplace le module sans recharger toute la page
+Ça veut dire Vite surveille tes fichiers src/
+Dès qu’un fichier change, il recompile UNIQUEMENT ce fichier
+Il envoie la mise à jour au navigateur. React remplace le module sans recharger toute la page
 
 ### JSON
 C’est le cerveau de ton projet Node.
@@ -139,15 +131,7 @@ Quand je tape npm run build, exécute cette commande
 
 C’est la configuration de TypeScript.
 
-Il dit :
-
-où sont les fichiers
-
-quelles règles appliquer
-
-quel standard JS générer
-
-quels types inclure
+Il dit où sont les fichiers, quelles règles appliquer, quel standard JS générer, quels types inclure
 
 Encore une fois :
 👉 Il ne va PAS dans le navigateur.
@@ -187,7 +171,28 @@ npx prisma init
 
 
 # Nest.JS
-...
+Controller → Service → Database
+
+1️⃣ Controller (front door): receive Http requests
+Examples: POST /tasks or GET /tasks
+
+2️⃣ Service (Brain): contains the logic
+Examples: creates a task, calls Prisma, validates datas
+
+3️⃣ Prisma (Hand): talks to the db
+
+npm install -g @nestjs/cli: install NestJS
+
+```bash
+nest g module tasks
+nest g service tasks
+nest g controller tasks
+```
+tasks/
+  tasks.module.ts
+  tasks.service.ts
+  tasks.controller.ts
+
 # Prisma
 
 - Goal: Prisma is a next-generation Object-Relational Mapper (ORM) specifically designed for Node.js and TypeScript. Its primary purpose is to simplify database interactions by allowing developers to work with data using objects in their code instead of writing raw SQL queries.
@@ -203,6 +208,8 @@ le fichier .prisma est une description pas la db, c'est un plan d'architecte ce 
 - npx prisma studio: Opens a GUI (Graphical User Interface) in your browser, allowing you to view and edit the data in your database without writing SQL.
 
 - npx prisma db push: Synchronizes your Prisma schema with your database schema without using migrations, often used for prototyping or local development
+
+npm install @prisma/client: create a PrismaService to communicate with Nest.js
 
 # Docker
 
