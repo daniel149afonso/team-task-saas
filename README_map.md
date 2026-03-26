@@ -182,6 +182,7 @@ Examples: creates a task, calls Prisma, validates datas
 3️⃣ Prisma (Hand): talks to the db
 
 npm install -g @nestjs/cli: install NestJS
+run the backend in dev mode: npm run start:dev
 
 ```bash
 nest g module tasks
@@ -241,7 +242,7 @@ Docker permet de dire :
 
 - docker compose up -d: is used to start and run your entire application stack in the background
 
-- docker compose ps to see which services are currently running and their health.
+- docker compose ps: to see which services are currently running and their health.
 
 - docker compose logs -f to follow the logs if you need to debug.
 

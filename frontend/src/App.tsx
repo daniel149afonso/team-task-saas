@@ -12,11 +12,11 @@ function App() {
 			<Routes>
 
 					<Route element={<Layout/>}>
-						/*Private area */
+						{/*Private area */}
 						<Route path="/dashboard" element={<Dashboard/>}/>
 					</Route>
 
-					/*Public area */
+					{/*Public area */}
 					<Route path = "/test" element={<Test/>}/>	
 					<Route path="/login" element={<Login/>}/>
 			</Routes>
