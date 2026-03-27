@@ -17,7 +17,7 @@ function App() {
 					</Route>
 
 					{/*Public area */}
-					<Route path = "/test" element={<Test/>}/>	
+					<Route path="/" element={<Test />} />	
 					<Route path="/login" element={<Login/>}/>
 			</Routes>
 		</>
