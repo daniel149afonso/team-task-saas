@@ -10,15 +10,16 @@ function App() {
 	return (
 		<>
 			<Routes>
-
-					<Route element={<Layout/>}>
-						{/*Private area */}
-						<Route path="/dashboard" element={<Dashboard/>}/>
-					</Route>
-
 					{/*Public area */}
 					<Route path="/" element={<Test />} />	
 					<Route path="/login" element={<Login/>}/>
+
+					{/*Private area */}
+					<Route element={<Layout/>}>
+						<Route path="/dashboard" element={<Dashboard/>}/>
+					</Route>
+
+					
 			</Routes>
 		</>
 	)
