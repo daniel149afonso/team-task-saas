@@ -9,18 +9,16 @@ function App() {
 
 	return (
 		<>
-			<Routes>
-					{/*Public area */}
-					<Route path="/" element={<Test />} />	
-					<Route path="/login" element={<Login/>}/>
+		<Routes>
+			{/*Public area */}
+			<Route path="/" element={<Test />} />	
+			<Route path="/login" element={<Login/>}/>
 
-					{/*Private area */}
-					<Route element={<Layout/>}>
-						<Route path="/dashboard" element={<Dashboard/>}/>
-					</Route>
-
-					
-			</Routes>
+			{/*Private area */}
+			<Route element={<Layout/>}>
+				<Route path="/dashboard" element={<Dashboard/>}/>
+			</Route>
+		</Routes>
 		</>
 	)
 }

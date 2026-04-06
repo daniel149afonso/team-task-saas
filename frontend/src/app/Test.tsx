@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import type { TaskStatus } from "../domain/task";
 
 type Task = {
 	id: string;
 	title: string;
+	status: TaskStatus;
 };
 
 export default function Test() {
@@ -29,15 +31,41 @@ export default function Test() {
 
 	//Create the task
 	const createTask = async () => {
-		await fetch("http://localhost:3000/tasks", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ title }),
+		try {
+				await fetch("http://localhost:3000/tasks", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ title }),
+			});
+
+			setTitle("");
+			fetchTasks();
+		} catch (err) {
+			console.error("Error creating task", err);
+		}
+	};
+
+	const updateTask = async (id: string, updates: any) => {
+		try {
+			await fetch(`http://localhost:3000/tasks/${id}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(updates),
+			});
+
+			fetchTasks(); // refresh the task list
+		} catch (err) {
+			console.error("Error updating task", err);
+		}
+	};
+
+	const deleteTask = async (id: string) => {
+		await fetch(`http://localhost:3000/tasks/${id}`, {
+			method: "DELETE",
 		});
 
-		setTitle("");
 		fetchTasks();
 	};
 
@@ -56,6 +84,27 @@ export default function Test() {
 			{tasks.map((t) => (
 				<div key={t.id}>{t.title}</div>
 			))}
+
+			{/*Task Status*/}
+			{tasks.map(task => (
+				<div key={task.id}>
+					<p>{task.title}</p>
+					<p>Status: {task.status}</p>
+
+					<button onClick={() => updateTask(task.id, { status: "doing" })}>
+						Mark as Doing
+					</button>
+
+					<button onClick={() => updateTask(task.id, { status: "done" })}>
+						Mark as Done
+					</button>
+
+					<button onClick={() => deleteTask(task.id)}>
+						Delete
+					</button>
+
+				</div>
+))}
 		</div>
 	);
 }
