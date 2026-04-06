@@ -1,9 +1,9 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import Login from "./app/auth/Login";
+import Dashboard from "./app/dashboard/Dashboard";
 import Layout from "./app/Layout";
-import Test from "./app/Test";
+import TasksPage from "./app/tasks/TasksPage";
 
 function App() {
 
@@ -11,7 +11,7 @@ function App() {
 		<>
 		<Routes>
 			{/*Public area */}
-			<Route path="/" element={<Test />} />	
+			<Route path="/" element={<TasksPage/>} />	
 			<Route path="/login" element={<Login/>}/>
 
 			{/*Private area */}

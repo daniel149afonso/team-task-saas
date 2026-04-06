@@ -215,7 +215,7 @@ npm install @prisma/client: create a PrismaService to communicate with Nest.js
 # Docker
 
 - Goal: Docker is a platform for "containerising" applications. Docker simplifies how you package and run your software so it works exactly the same on any machine.
-The main goal of Docker is to solve the "it works on my machine" problem. It ensures that if an app runs on a developer's laptop, it will run identically in testing and production.
+The main goal of Docker is to solve the "it works on my machine" problem. It ensures that if an app runs on a developer's laptop, it will run identically in testing and production. The db is installed in Docker and not locally. To turn on the db, you have to run Docker first.
 
 Docker = environnement isolé reproductible.
 
@@ -251,3 +251,6 @@ Docker permet de dire :
 - docker compose down: Stops and removes the containers and networks created by up.
 
 Le backend peut être redémarrer plusieurs fois mais la db doit être stable sinon on perd toutes les données à chaque fois. Docker isole la db
+
+### CRUD
+Create, read, update and delete
