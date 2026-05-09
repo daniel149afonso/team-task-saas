@@ -1,29 +1,39 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { fetchTeams, createTeam } from "./api/teams.api";
-import { TeamForm } from "./components/TeamForm";
-import { TeamList } from "./components/TeamList";
+import { useEffect, useState } from 'react';
+import type { Team } from '../../domain/types';
+import { fetchTeams, createTeam } from './api/teams.api';
+import { TeamForm } from './components/TeamForm';
+import { TeamList } from './components/TeamList';
 
 export default function TeamsPage() {
-  const [teams, setTeams] = useState([]);
+  const [teams, setTeams] = useState<Team[]>([]);
 
-  const load = async () => {
+  async function load() {
     const data = await fetchTeams();
-    setTeams(data);
-  };
+    setTeams(data ?? []);
+  }
 
   useEffect(() => {
     load();
   }, []);
 
   return (
-    <div>
-      <h1>Teams</h1>
+    <>
+      <div className="page-header">
+        <h1>Teams</h1>
+        <p>Manage your teams and view their tasks</p>
+      </div>
 
-      <TeamForm onCreate={async (name) => { await createTeam(name); load(); }} />
+      <div className="card section">
+        <div className="section-title" style={{ marginBottom: 16 }}>New team</div>
+        <TeamForm onCreate={async (name) => { await createTeam(name); load(); }} />
+      </div>
 
-      <TeamList teams={teams} />
-    </div>
+      <div className="section">
+        <div className="section-title" style={{ marginBottom: 16 }}>
+          All teams ({teams.length})
+        </div>
+        <TeamList teams={teams} />
+      </div>
+    </>
   );
 }

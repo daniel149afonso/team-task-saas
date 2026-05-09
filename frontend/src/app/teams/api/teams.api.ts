@@ -1,11 +1,12 @@
-import { fetcher } from "../../../lib/fetcher";
+import { fetcher } from '../../../lib/fetcher';
+import type { Team } from '../../../domain/types';
 
-const BASE_URL = "http://localhost:3000/teams";
+const BASE_URL = 'http://localhost:3000/teams';
 
-export const fetchTeams = () => fetcher(BASE_URL);
+export const fetchTeams = (): Promise<Team[]> => fetcher(BASE_URL);
 
-export const createTeam = (name: string) =>
+export const createTeam = (name: string): Promise<Team> =>
   fetcher(BASE_URL, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ name }),
   });
