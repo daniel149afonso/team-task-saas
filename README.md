@@ -77,6 +77,17 @@ The frontend runs on port `5173` and opens automatically in the browser.
 ### Project structure
 
 ```
+  ┌─────────────────────┐        HTTP/JSON        ┌────────────────────────┐
+  │   FRONTEND (React)  │  ─────────────────────► │   BACKEND (Express)    │
+  │   localhost:5173    │ ◄─────────────────────  │   localhost:3000       │
+  └─────────────────────┘     JWT dans headers    └───────────┬────────────┘
+                                                              │ Prisma ORM
+                                                              ▼
+                                                   ┌──────────────────────┐
+                                                   │  PostgreSQL (Docker) │
+                                                   └──────────────────────┘
+```
+```
 team-task-saas/
 ├── backend/
 │   ├── prisma/
