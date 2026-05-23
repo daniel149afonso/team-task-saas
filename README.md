@@ -1,3 +1,5 @@
+*This project has been created as part of the 42 curriculum by Daniel.*
+
 # Team Task Manager
 
 ## Description
@@ -72,42 +74,75 @@ npm run dev
 
 The frontend runs on port `5173` and opens automatically in the browser.
 
-### Project structure
+### Architecture overview
 
 ```
   ┌─────────────────────┐        HTTP/JSON        ┌────────────────────────┐
   │   FRONTEND (React)  │  ─────────────────────► │   BACKEND (Express)    │
   │   localhost:5173    │ ◄─────────────────────  │   localhost:3000       │
-  └─────────────────────┘     JWT dans headers    └───────────┬────────────┘
+  └─────────────────────┘    JWT in headers       └───────────┬────────────┘
                                                               │ Prisma ORM
                                                               ▼
                                                    ┌──────────────────────┐
-                                                   │  PostgreSQL (Docker) │
+                                                   │     PostgreSQL       │
+                                                   │    localhost:5432    │
                                                    └──────────────────────┘
 ```
+
+### Project structure
+
+**Backend**
+
 ```
-team-task-saas/
-├── backend/
-│   ├── prisma/
-│   │   └── schema.prisma       ← Database schema (User, Team, Task)
-│   └── src/
-│       ├── index.ts            ← Express app entry point
-│       ├── lib/prisma.ts       ← Prisma client singleton
-│       ├── middleware/
-│       │   └── authMiddleware.ts
-│       └── routes/
-│           ├── auth.ts         ← POST /auth/register, POST /auth/login
-│           ├── tasks.ts        ← GET/POST/PATCH/DELETE /tasks
-│           └── teams.ts        ← GET/POST /teams
-└── frontend/
-    └── src/
-        ├── app/
-        │   ├── auth/Login.tsx
-        │   ├── dashboard/
-        │   ├── tasks/
-        │   └── teams/
-        ├── context/AuthContext.tsx
-        └── lib/fetcher.ts      ← Authenticated fetch wrapper
+backend/
+├── prisma/
+│   ├── migrations/             ← Migration history
+│   └── schema.prisma           ← Models: User, Team, Task
+└── src/
+    ├── index.ts                ← Express app entry point (CORS, routes)
+    ├── lib/
+    │   └── prisma.ts           ← Prisma client singleton
+    ├── middleware/
+    │   └── authMiddleware.ts   ← JWT verification on protected routes
+    └── routes/
+        ├── auth.ts             ← POST /auth/register, POST /auth/login
+        ├── tasks.ts            ← GET/POST/PATCH/DELETE /tasks
+        └── teams.ts            ← GET/POST /teams
+```
+
+**Frontend**
+
+```
+frontend/src/
+├── main.tsx                    ← React entry point
+├── App.tsx                     ← Router setup & protected routes
+├── context/
+│   └── AuthContext.tsx         ← Auth state (token, user, login, logout)
+├── lib/
+│   └── fetcher.ts              ← Authenticated fetch wrapper
+├── domain/
+│   ├── types.ts                ← Shared TypeScript types (User, Team, Task)
+│   └── task.ts                 ← Task-specific types
+└── app/
+    ├── Layout.tsx              ← Shared layout (navbar, sidebar)
+    ├── auth/
+    │   └── Login.tsx           ← Login & register form
+    ├── dashboard/
+    │   └── Dashboard.tsx       ← Home page after login
+    ├── tasks/
+    │   ├── TasksPage.tsx       ← Tasks page
+    │   ├── api/
+    │   │   └── tasks.api.ts    ← API calls for tasks
+    │   └── components/
+    │       ├── TaskList.tsx
+    │       └── TaskForm.tsx
+    └── teams/
+        ├── TeamsPage.tsx       ← Teams page
+        ├── api/
+        │   └── teams.api.ts    ← API calls for teams
+        └── components/
+            ├── TeamList.tsx
+            └── TeamForm.tsx
 ```
 
 ### API reference
@@ -118,9 +153,9 @@ team-task-saas/
 | POST | `/auth/login` | No | Log in, receive JWT |
 | GET | `/teams` | Yes | List all teams (with tasks) |
 | POST | `/teams` | Yes | Create a team |
-| GET | `/tasks?teamId=` | Yes | List tasks (optional filter) |
+| GET | `/tasks?teamId=` | Yes | List tasks (optional filter by team) |
 | POST | `/tasks` | Yes | Create a task |
-| PATCH | `/tasks/:id` | Yes | Update a task |
+| PATCH | `/tasks/:id` | Yes | Update a task (title, description, status) |
 | DELETE | `/tasks/:id` | Yes | Delete a task |
 
 ## Resources

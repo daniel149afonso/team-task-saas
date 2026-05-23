@@ -1,98 +1,134 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Backend — Team Task Manager
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Express REST API for Team Task Manager. Handles authentication, teams, and tasks. Secured with JWT. Connected to PostgreSQL via Prisma ORM.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Stack
 
-## Description
+| Tool | Version | Role |
+|------|---------|------|
+| Node.js | ≥18 | Runtime |
+| Express | 4 | HTTP framework |
+| TypeScript | 5.7 | Static typing |
+| Prisma | 5 | ORM & migrations |
+| PostgreSQL | 16 | Database |
+| bcryptjs | — | Password hashing |
+| jsonwebtoken | — | JWT signing & verification |
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+## Installation
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+## Environment variables
+
+Create a `.env` file at the root of `backend/`:
+
+```env
+DATABASE_URL="postgresql://<user>:<password>@localhost:5432/team_task_manager?schema=public"
+JWT_SECRET="your-secret-key"
+PORT=3000
+```
+
+## Database setup
+
+Apply all migrations and generate the Prisma client:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npx prisma migrate dev
 ```
 
-## Run tests
+To inspect the database in a browser UI:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma studio
 ```
 
-## Deployment
+## Scripts
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with hot reload (ts-node-dev) on port `3000` |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm start` | Run the compiled production build |
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Structure
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```
+backend/
+├── prisma/
+│   ├── migrations/             ← Migration history (auto-generated)
+│   └── schema.prisma           ← Database models: User, Team, Task
+└── src/
+    ├── index.ts                ← App entry: Express setup, CORS, route mounting
+    ├── lib/
+    │   └── prisma.ts           ← Prisma client singleton
+    ├── middleware/
+    │   └── authMiddleware.ts   ← Verifies JWT on protected routes
+    └── routes/
+        ├── auth.ts             ← POST /auth/register, POST /auth/login
+        ├── tasks.ts            ← GET/POST/PATCH/DELETE /tasks
+        └── teams.ts            ← GET/POST /teams
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## API reference
 
-## Resources
+All routes prefixed with `/tasks` and `/teams` require the header:
+```
+Authorization: Bearer <token>
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### Auth
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+| Method | Endpoint | Body | Description |
+|--------|----------|------|-------------|
+| POST | `/auth/register` | `{ email, password }` | Create account, returns JWT |
+| POST | `/auth/login` | `{ email, password }` | Log in, returns JWT |
 
-## Support
+### Teams
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/teams` | List all teams (includes their tasks) |
+| POST | `/teams` | Create a team — body: `{ name }` |
 
-## Stay in touch
+### Tasks
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/tasks` | List all tasks |
+| GET | `/tasks?teamId=<id>` | List tasks filtered by team |
+| POST | `/tasks` | Create a task — body: `{ title, teamId }` |
+| PATCH | `/tasks/:id` | Update a task — body: `{ title?, description?, status? }` |
+| DELETE | `/tasks/:id` | Delete a task |
 
-## License
+### Task statuses
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+todo  →  doing  →  done
+```
+
+## Database schema
+
+```
+User
+├── id         UUID (PK)
+├── email      String (unique)
+├── password   String (hashed)
+└── createdAt  DateTime
+
+Team
+├── id         UUID (PK)
+├── name       String
+├── createdAt  DateTime
+└── tasks      Task[]
+
+Task
+├── id          UUID (PK)
+├── teamId      UUID (FK → Team)
+├── title       String
+├── description String?
+├── status      todo | doing | done
+├── createdAt   DateTime
+└── updatedAt   DateTime
+```
